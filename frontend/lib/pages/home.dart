@@ -1,0 +1,96 @@
+import 'dart:async';
+
+import 'package:crud_activity/api_service/student_service.dart';
+import 'package:crud_activity/components/custom_appbar.dart';
+import 'package:crud_activity/components/custom_home_card.dart';
+import 'package:crud_activity/model/students_model.dart';
+import 'package:crud_activity/pages/create.dart';
+import 'package:crud_activity/pages/update.dart';
+import 'package:flutter/material.dart';
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => HomeState();
+}
+
+class HomeState extends State<Home> {
+  late Future<List<StudentData>> futureStudentData;
+  final ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    futureStudentData = apiService.fetchStudentData();
+  }
+
+  void _refreshStudentData() {
+    setState(() {
+      futureStudentData = apiService.fetchStudentData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const AppBarAll(title: 'Student Info'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateStudent()),
+          );
+
+          if (result == true) {
+            _refreshStudentData();
+          }
+        },
+        backgroundColor: Colors.blue[200],
+        child: const Icon(Icons.add),
+      ),
+      body: Center(
+        child: FutureBuilder<List<StudentData>>(
+          future: futureStudentData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Text('No data available');
+            } else {
+              final students = snapshot.data!;
+              return ListView.builder(
+                itemCount: students.length,
+                itemBuilder: (context, index) {
+                  final student = students[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UpdateStudent(studentData: student,)
+                          )
+                      );
+
+                      if (result == true) {
+                        _refreshStudentData();
+                      }
+                    },
+                    child: HomeCard(
+                        firstName: student.firstName,
+                        lastName: student.lastName,
+                        course: student.course,
+                        year: student.year,
+                        enrolled: student.enrolled),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
