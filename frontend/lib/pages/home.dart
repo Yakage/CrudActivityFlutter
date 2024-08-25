@@ -25,7 +25,7 @@ class HomeState extends State<Home> {
     futureStudentData = apiService.fetchStudentData();
   }
 
-  void _refreshStudentData() {
+  void refreshStudentData() {
     setState(() {
       futureStudentData = apiService.fetchStudentData();
     });
@@ -43,7 +43,7 @@ class HomeState extends State<Home> {
           );
 
           if (result == true) {
-            _refreshStudentData();
+            refreshStudentData();
           }
         },
         backgroundColor: Colors.blue[200],
@@ -70,12 +70,12 @@ class HomeState extends State<Home> {
                       final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UpdateStudent(studentData: student,)
-                          )
+                              builder: (context) => UpdateStudent(studentData: student),
+                          ),
                       );
 
                       if (result == true) {
-                        _refreshStudentData();
+                        refreshStudentData();
                       }
                     },
                     child: HomeCard(

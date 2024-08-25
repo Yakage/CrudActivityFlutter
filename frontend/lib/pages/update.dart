@@ -1,4 +1,5 @@
 import 'package:crud_activity/api_service/student_service.dart';
+import 'package:crud_activity/components/alert_dialog.dart';
 import 'package:crud_activity/components/custom_appbar.dart';
 import 'package:crud_activity/components/custom_textfield.dart';
 import 'package:crud_activity/model/students_model.dart';
@@ -161,22 +162,10 @@ class _UpdateStudentState extends State<UpdateStudent> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          await apiService.updateStudentData(
-                            id: widget.studentData.id,
-                            firstname: firstNameController.text,
-                            lastname: lastNameController.text,
-                            course: courseController.text,
-                            year: selectedYear ?? '',
-                            enrolled: enrolled,
-                          );
-                          Navigator.pop(context, true);
-                        }
-                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
                       ),
                       child: const Text(
                         'Update',
@@ -185,11 +174,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
                           fontSize: 16,
                         ),
                       ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           await apiService.updateStudentData(
@@ -203,6 +187,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
                           Navigator.pop(context, true);
                         }
                       },
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
                       child: const Text(
                         'Delete',
                         style: TextStyle(
@@ -210,6 +199,18 @@ class _UpdateStudentState extends State<UpdateStudent> {
                           fontSize: 16,
                         ),
                       ),
+                      onPressed: () async {
+                        final result = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return DialogAlertBox(id: widget.studentData.id,);
+                          }
+                        );
+
+                        if (result == true) {
+                          Navigator.pop(context, true);
+                        }
+                      },
                     ),
                   ],
                 )

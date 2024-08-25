@@ -3,6 +3,7 @@ import 'package:crud_activity/model/create_student_data.dart';
 import 'package:crud_activity/model/students_model.dart';
 import 'package:crud_activity/model/update_student_data.dart';
 import 'package:crud_activity/pages/update.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -75,6 +76,23 @@ class ApiService {
           jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to update student data');
+    }
+  }
+
+  Future<void> deleteStudentData({required int? id}) async {
+    final response = await http.delete(
+      Uri.parse('${url}student/deleteStudent/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('Student data deleted succcessfully');
+      }
+    } else {
+      throw Exception('Failed to delete student data');
     }
   }
 }
