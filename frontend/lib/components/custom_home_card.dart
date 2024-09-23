@@ -7,51 +7,40 @@ class HomeCard extends StatelessWidget {
   final String course;
   final String year;
   final bool enrolled;
-  const HomeCard(
-      {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.course,
-      required this.year,
-      required this.enrolled});
+
+  const HomeCard({
+    super.key,
+    required this.firstName,
+    required this.lastName,
+    required this.course,
+    required this.year,
+    required this.enrolled,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Define a reusable text style
+    const TextStyle textStyle = TextStyle(fontSize: 14);
+
     return GestureDetector(
       child: Card(
         color: Colors.white70,
-        margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Container(
-          padding: EdgeInsets.all(15),
+        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  'Name: $lastName, $firstName',
-                  style: TextStyle(fontSize: 16),
-                ),
+              Text(
+                'Name: $lastName, $firstName',
+                style: textStyle.copyWith(fontSize: 16),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  'Course: $course Year: $year',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  'Enrolled: ${enrolled ? "Yes" : "No"}',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
+              const SizedBox(height: 4),
+              Text('Course: $course', style: textStyle),
+              const SizedBox(height: 4),
+              Text('Year: $year', style: textStyle),
+              const SizedBox(height: 4),
+              Text('Enrolled: ${enrolled ? "Yes" : "No"}', style: textStyle),
             ],
           ),
         ),
