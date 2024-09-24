@@ -6,7 +6,7 @@ import 'package:crud_activity/model/students_model.dart';
 import 'package:flutter/material.dart';
 
 class UpdateStudent extends StatefulWidget {
-  final StudentData studentData;
+  final StudentDataModel studentData;
   const UpdateStudent({super.key, required this.studentData});
 
   @override
@@ -176,15 +176,21 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       ),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          await apiService.updateStudentData(
-                            id: widget.studentData.id,
-                            firstname: firstNameController.text,
-                            lastname: lastNameController.text,
-                            course: courseController.text,
-                            year: selectedYear ?? '',
-                            enrolled: enrolled,
-                          );
-                          Navigator.pop(context, true);
+                          try {
+                            await apiService.updateStudentData(
+                              id: widget.studentData.id,
+                              firstName: firstNameController.text,
+                              lastName: lastNameController.text,
+                              course: courseController.text,
+                              year: selectedYear ?? '',
+                              enrolled: enrolled,
+                            );
+                            Navigator.pop(context, true);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Failed to update student: $e'),
+                            ));
+                          }
                         }
                       },
                     ),
@@ -201,11 +207,12 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       ),
                       onPressed: () async {
                         final result = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return DialogAlertBox(id: widget.studentData.id,);
-                          }
-                        );
+                            context: context,
+                            builder: (context) {
+                              return DialogAlertBox(
+                                id: widget.studentData.id,
+                              );
+                            });
 
                         if (result == true) {
                           Navigator.pop(context, true);

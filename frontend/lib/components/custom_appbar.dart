@@ -8,8 +8,11 @@ class AppBarAll extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.blue[200],
-      centerTitle: true,
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
       elevation: 2,
+      centerTitle: true,
       title: Text(
         title,
         style: const TextStyle(
@@ -17,6 +20,7 @@ class AppBarAll extends StatelessWidget implements PreferredSizeWidget{
           fontWeight: FontWeight.bold,
         ),
       ),
+      
     );
   }
 

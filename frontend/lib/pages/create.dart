@@ -141,8 +141,8 @@ class _CreateStudentState extends State<CreateStudent> {
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       await apiService.createStudentData(
-                        firstname: firstNameController.text,
-                        lastname: lastNameController.text,
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
                         course: courseController.text,
                         year: selectedYear ?? '',
                         enrolled: enrolled,

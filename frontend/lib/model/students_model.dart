@@ -1,4 +1,4 @@
-class StudentData {
+class StudentDataModel {
   final int? id;
   final String firstName;
   final String lastName;
@@ -6,8 +6,8 @@ class StudentData {
   final String year;
   final bool enrolled;
 
-  const StudentData({
-    this.id,
+  const StudentDataModel({
+    required this.id,
     required this.firstName,
     required this.lastName,
     required this.course,
@@ -15,14 +15,14 @@ class StudentData {
     required this.enrolled,
   });
 
-  factory StudentData.fromJson(Map<String, dynamic> json) {
-    return StudentData(
+  factory StudentDataModel.fromJson(Map<String, dynamic> json) {
+    return StudentDataModel(
       id: json['id'] as int?,
-      firstName: json['firstname'] as String,
-      lastName: json['lastname'] as String,
-      course: json['course'] as String,
-      year: json['year'] as String,
-      enrolled: json['enrolled'] == 1,
+      firstName: json['firstname'] as String? ?? '',
+      lastName: json['lastname'] as String? ?? '',
+      course: json['course'] as String? ?? '',
+      year: json['year'] as String? ?? '',
+      enrolled: (json['enrolled'] as int?) == 1,
     );
   }
 }

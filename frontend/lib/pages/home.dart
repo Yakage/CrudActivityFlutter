@@ -16,18 +16,18 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  late Future<List<StudentData>> futureStudentData;
+  Future<List<StudentDataModel>> futureStudentDataModel = ApiService().fetchStudentData();
   final ApiService apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    futureStudentData = apiService.fetchStudentData();
+    futureStudentDataModel = apiService.fetchStudentData();
   }
 
   void refreshStudentData() {
     setState(() {
-      futureStudentData = apiService.fetchStudentData();
+      futureStudentDataModel = apiService.fetchStudentData();
     });
   }
 
@@ -50,8 +50,8 @@ class HomeState extends State<Home> {
         child: const Icon(Icons.add),
       ),
       body: Center(
-        child: FutureBuilder<List<StudentData>>(
-          future: futureStudentData,
+        child: FutureBuilder<List<StudentDataModel>>(
+          future: futureStudentDataModel,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
