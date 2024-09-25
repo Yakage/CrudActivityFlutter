@@ -1,121 +1,71 @@
-const mysql = require('mysql');
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: 'localhost',
-  user: 'root',
-  database: 'crud_activity_flutter',
-});
+const Student = require('../models/students'); // Assuming your model is in the 'models' folder
 
-exports.getAllStudents = (req, res) => {
-  pool.getConnection((error, connection) => {
-    if (error) throw error
-    console.log(`connected as id ${connection.threadId}`);
-
-    connection.query('SELECT * from users', (error, results) => {
-        connection.release();
-
-        if (!error) {
-          res.status(200).json(results);
-        } else {
-          console.log(error);
-          res.status(500).json(error);
-        }
-      });
-    
-  });
+// Get all students
+exports.getAllStudents = async (req, res) => {
+  try {
+    const students = await Student.find();
+    res.status(200).json(students);
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
 };
 
-exports.getStudentProfile = (req, res) => {
-  pool.getConnection((error, connection) => {
-    try {
-      console.log(`connected as id ${connection.threadId}`);
-
-      connection.query('SELECT * from users WHERE id = ?', [req.perams.id], (error, results) => {
-          connection.release();
-
-          if (error) {
-            res.status(404).json({ message: 'User not found' });
-          };
-
-          if (results.length > 0) {
-              res.status(200).json(results[0]);
-          };
-      });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json(error); 
+// Get a single student by ID
+exports.getStudentProfile = async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.id);
+    if (student) {
+      res.status(200).json(student);
+    } else {
+      res.status(404).json({ message: 'Student not found' });
     }
-  });
+  } catch (error) {
+    console.error('Error fetching student profile:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
 };
 
-exports.createStudent = (req, res) => {
-  pool.getConnection((error, connection) => {
-      if (error) {
-        console.error('Error getting MySQL connection:', error);
-        return res.status(500).json({ message: 'Server error occurred' });
-      }
-
-      const params = req.body;
-
-      connection.query('INSERT INTO users SET ?', params, (error, results) => {
-          connection.release();
-
-          if (!error) {
-              res.status(200).json({ message: `Record of ${[params.last_name, params.first_name]} has been added.`});
-          } else {
-              console.log(error);
-              res.status(500).json({ message: error});
-          };
-      });
-  });
+// Create a new student
+exports.createStudent = async (req, res) => {
+  try {
+    const student = new Student(req.body);
+    await student.save();
+    res.status(200).json({ message: `Record of ${student.lastname}, ${student.firstname} has been added.` });
+  } catch (error) {
+    console.error('Error creating student:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
 };
 
-exports.updateStudent = (req, res) => {
-  pool.getConnection((error, connection) => {
-      if (error) {
-        console.error('Error getting MySQL connection:', error);
-        return res.status(500).json({ message: 'Server error occurred' });
-      }
-      console.log(`connected as id ${connection.threadId}`);
+// Update a student's profile
+exports.updateStudent = async (req, res) => {
+  try {
+    const result = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
-      const params= req.body;
-      const id = req.params.id;
-
-      connection.query('UPDATE users SET ? where id = ?', [params, id], (error, results) => {
-          connection.release();
-
-          if (!error) {
-              res.status(200).json({ message: `Record of ${[params.lastname, params.firstname]} has been updated.`});
-          } else {
-              console.log(error);
-              res.status(500).json({ message: error});
-          };
-      });
-  });
+    if (result) {
+      res.status(200).json({ message: `Record of ${result.lastname}, ${result.firstname} has been updated.` });
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error) {
+    console.error('Error updating student:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
 };
 
-exports.deleteStudent = (req, res) => {
-  pool.getConnection((error, connection) => {
-      if (error) {
-          console.error('Error getting MySQL connection:', error);
-          return res.status(500).json({ message: 'Server error occurred' });
-      }
-      console.log(`Connected as id ${connection.threadId}`);
+// Delete a student by ID
+exports.deleteStudent = async (req, res) => {
+  try {
+    const result = await Student.findByIdAndDelete(req.params.id);
 
-      connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (error, result) => {
-          connection.release(); 
-
-          if (error) {
-              console.error('Error executing query:', error);
-              return res.status(500).json({ message: 'Server error occurred' });
-          }
-
-          if (result.affectedRows > 0) {
-              res.status(200).json({ message: `Record with ID # ${req.params.id} has been deleted.` });
-          } else {
-              res.status(404).json({ message: 'User not found' });
-          }
-      });
-  });
+    if (result) {
+      res.status(200).json({ message: `Record with ID #${req.params.id} has been deleted.` });
+    } else {
+      res.status(404).json({ message: 'Student not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    res.status(500).json({ message: 'Server error occurred' });
+  }
 };
-
