@@ -14,7 +14,7 @@ app.use("/api", userRoutes);
 const mongoose = require("mongoose");
 
 mongoose
-    .connect(process.env.MONGO_URL)
+    .connect("mongodb+srv://Benedict:dBbVYoeXczUsGEZ4@ishkolarium.n4c2z.mongodb.net/?retryWrites=true&w=majority&appName=Ishkolarium")
     .then(() => console.log("MongoDB connected"))
     .catch((error) => console.log("MongoDB connection error:", error));
 
