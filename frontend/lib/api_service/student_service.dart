@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class StudentRepositoryImpl implements StudentRepository{
-  final String url = 'http://localhost:3000/api/';
+  final String url = 'https://crudactivityflutter-1.onrender.com/api/';
 
   @override
   Future<List<StudentDataModel>> fetchStudentData() async {
