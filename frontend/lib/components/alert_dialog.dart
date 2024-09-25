@@ -2,12 +2,12 @@ import 'package:crud_activity/api_service/student_service.dart';
 import 'package:flutter/material.dart';
 
 class DialogAlertBox extends StatelessWidget {
-  final int? id;
+  final String? id;
   const DialogAlertBox({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
-    final ApiService apiService = ApiService();
+    final StudentRepositoryImpl apiService = StudentRepositoryImpl();
     return AlertDialog(
       backgroundColor: Colors.white,
       content: SizedBox(

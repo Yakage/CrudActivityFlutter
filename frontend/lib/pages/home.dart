@@ -16,8 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  Future<List<StudentDataModel>> futureStudentDataModel = ApiService().fetchStudentData();
-  final ApiService apiService = ApiService();
+  Future<List<StudentDataModel>> futureStudentDataModel = StudentRepositoryImpl().fetchStudentData();
+  final StudentRepositoryImpl apiService = StudentRepositoryImpl();
 
   @override
   void initState() {

@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:crud_activity/api_service/student_repository.dart';
 import 'package:crud_activity/model/students_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-class ApiService {
+class StudentRepositoryImpl implements StudentRepository{
   final String url = 'http://localhost:3000/api/';
 
+  @override
   Future<List<StudentDataModel>> fetchStudentData() async {
     final response = await http.get(Uri.parse('${url}students'));
 
@@ -17,6 +19,7 @@ class ApiService {
     }
   }
 
+  @override
   Future<StudentDataModel> createStudentData({
     required String firstName,
     required String lastName,
@@ -46,8 +49,9 @@ class ApiService {
     }
   }
 
+  @override
   Future<StudentDataModel> updateStudentData({
-    required int? id,
+    required String? id,
     required String firstName,
     required String lastName,
     required String course,
@@ -76,7 +80,8 @@ class ApiService {
     }
   }
 
-  Future<void> deleteStudentData({required int? id}) async {
+  @override
+  Future<void> deleteStudentData({required String? id}) async {
     final response = await http.delete(
       Uri.parse('${url}student/deleteStudent/$id'),
       headers: <String, String>{

@@ -1,5 +1,5 @@
 class StudentDataModel {
-  final int? id;
+  final String? id;
   final String firstName;
   final String lastName;
   final String course;
@@ -17,12 +17,12 @@ class StudentDataModel {
 
   factory StudentDataModel.fromJson(Map<String, dynamic> json) {
     return StudentDataModel(
-      id: json['id'] as int?,
+      id: json['_id'] as String? ?? '',
       firstName: json['firstname'] as String? ?? '',
       lastName: json['lastname'] as String? ?? '',
       course: json['course'] as String? ?? '',
       year: json['year'] as String? ?? '',
-      enrolled: (json['enrolled'] as int?) == 1,
+      enrolled: json['enrolled'] as bool? ?? false,
     );
   }
 }

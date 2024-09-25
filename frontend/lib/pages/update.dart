@@ -14,7 +14,7 @@ class UpdateStudent extends StatefulWidget {
 }
 
 class _UpdateStudentState extends State<UpdateStudent> {
-  final ApiService apiService = ApiService();
+  final StudentRepositoryImpl apiService = StudentRepositoryImpl();
   final formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -77,7 +77,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                 CustomTextField(controller: courseController, text: "Course"),
                 const SizedBox(height: 16.0),
                 DropdownButtonFormField<String>(
-                  value: selectedYear, // Set the initial value
+                  value: selectedYear,
                   decoration: InputDecoration(
                     labelText: 'Year',
                     labelStyle: const TextStyle(

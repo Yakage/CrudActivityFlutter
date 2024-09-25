@@ -11,7 +11,7 @@ class CreateStudent extends StatefulWidget {
 }
 
 class _CreateStudentState extends State<CreateStudent> {
-  final ApiService apiService = ApiService();
+  final StudentRepositoryImpl apiService = StudentRepositoryImpl();
   final formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
